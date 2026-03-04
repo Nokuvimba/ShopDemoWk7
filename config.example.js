@@ -1,0 +1,1 @@
+export const BASE_URL = 'https://dorethea-siphonlike-novelly.ngrok-free.dev'

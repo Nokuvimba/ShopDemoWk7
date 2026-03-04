@@ -70,6 +70,20 @@ export default function useProducts() {
     }
   }
 
+  //adding product to basket
+    async function addProductToBasket(id) {
+    setPosting(true);
+    try {
+      const res = await productApi.addProductToBasket(id);
+      await fetchProducts();
+      return res;
+    } finally {
+      setPosting(false);
+    }
+  }
+
+
+
   return {
     products,
     loading,
@@ -78,5 +92,7 @@ export default function useProducts() {
     createProduct,
     updateProduct,
     deleteProduct,
+   addProductToBasket,
+
   };
 }

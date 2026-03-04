@@ -63,9 +63,25 @@ async function deleteProduct(id) {
   return true;
 }
 
+//Add product to basket
+async function addProductToBasket(id) {
+  const res = await fetch(`${BASE_URL}/products/${id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Server: ${res.status} ${text}`);
+  }
+  return res.json ? await res.json().catch(() => null) : null;
+}
+
+
 export default {
   getProducts,
   createProduct,
   updateProduct,
   deleteProduct,
+  addProductToBasket
 };
