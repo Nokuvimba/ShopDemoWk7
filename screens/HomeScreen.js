@@ -14,6 +14,7 @@ export default function HomeScreen({ navigation }) {
       <Text style={styles.text}>Manage your inventory from the Inventory screen.</Text>
       <Button title="Go to Inventory" onPress={() => navigation.navigate('Inventory')} />
       <Button title="Product Browser" onPress={() => navigation.navigate('Product Browser')} /> 
+      <Button title="Basket" onPress={() => navigation.navigate('Basket')} />
     </View>
   );
 }

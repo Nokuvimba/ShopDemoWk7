@@ -13,15 +13,7 @@ const BASE_URL = CONFIG_BASE_URL || 'https://your-backend.example';
 // Fetch the list of products from the backend.
 // Throws an Error if the response is not ok.
 async function getProducts() {
-  const res = await fetch(`${BASE_URL}/products`, {
-    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' }
-  });
-  if (!res.ok) throw new Error(`Server responded ${res.status}`);
-  return res.json();
-}
-
-async function getProduct(id) {
-  const res = await fetch(`${BASE_URL}/products/${id}`, {
+  const res = await fetch(`${BASE_URL}/basket`, {
     headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' }
   });
   if (!res.ok) throw new Error(`Server responded ${res.status}`);
@@ -30,8 +22,8 @@ async function getProduct(id) {
 
 // Create a product by POSTing the provided body (expects JSON serializable body).
 // Returns parsed JSON response when available; throws on non-OK responses.
-async function createProduct(body) {
-  const res = await fetch(`${BASE_URL}/products`, {
+async function addToBasket(body) {
+  const res = await fetch(`${BASE_URL}/basket`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
     body: JSON.stringify(body),
@@ -43,24 +35,11 @@ async function createProduct(body) {
   return res.json ? await res.json().catch(() => null) : null;
 }
 
-// Update an existing product by id using PUT. Body should contain the updated fields.
-// Throws on non-OK responses and returns parsed JSON when available.
-async function updateProduct(id, body) {
-  const res = await fetch(`${BASE_URL}/products/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Server: ${res.status} ${text}`);
-  }
-  return res.json ? await res.json().catch(() => null) : null;
-}
+
 
 // Delete a product by id. Returns true on success, throws on failure.
-async function deleteProduct(id) {
-  const res = await fetch(`${BASE_URL}/products/${id}`, {
+async function removeFromBasket(id) {
+  const res = await fetch(`${BASE_URL}/basket/${id}`, {
     method: 'DELETE',
     headers: { 'ngrok-skip-browser-warning': 'true' },
   });
@@ -71,26 +50,10 @@ async function deleteProduct(id) {
   return true;
 }
 
-//Add product to basket
-async function addProductToBasket(id) {
-  const res = await fetch(`${BASE_URL}/products/${id}`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-    body: JSON.stringify(body),
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Server: ${res.status} ${text}`);
-  }
-  return res.json ? await res.json().catch(() => null) : null;
-}
 
 
 export default {
   getProducts,
-  getProduct,
-  createProduct,
-  updateProduct,
-  deleteProduct,
-  addProductToBasket
+  addToBasket,
+  removeFromBasket,
 };

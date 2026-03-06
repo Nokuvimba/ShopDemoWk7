@@ -9,7 +9,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from './screens/HomeScreen';
 import InventoryScreen from './screens/InventoryScreen';
 import ProductBrowserScreen from './screens/ProductBrowser';
-import BasketScreen from './screens/Basket';
+import BasketScreen from './screens/BasketScreen';
 
 //const Stack = createNativeStackNavigator();
 
@@ -22,6 +22,7 @@ export default function App() {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Inventory" component={InventoryScreen} options={{ title: 'Inventory' }} />
         <Tab.Screen name="Product Browser" component={ProductBrowserScreen} options={{ title: 'Products' }} />
+        <Tab.Screen name="Basket" component={BasketScreen} options={{ title: 'Basket' }} />
       </Tab.Navigator>
     </NavigationContainer>
   );

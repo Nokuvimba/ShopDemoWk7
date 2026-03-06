@@ -8,8 +8,9 @@
 
 import React from 'react';
 import { View, Text, Image, Button, StyleSheet, Alert } from 'react-native';
+import AddToBasket from './AddToBasket';
 
-export default function ProductItem({ item, }) {
+export default function ProductItem({ item, onAddToBasket }) {
     const id = item._id || item.id;
     
   return (
@@ -23,6 +24,7 @@ export default function ProductItem({ item, }) {
         <Image source={{ uri: item.image }} style={{ width: 100, height: 100, borderRadius: 6, marginTop: 10 }} />
       )}
 
+      <AddToBasket onAdd={() => onAddToBasket(item)} />
     </View>
   );
 }

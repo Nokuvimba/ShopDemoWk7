@@ -16,25 +16,29 @@ import {
 } from 'react-native';
 
 import ProductItem from '../components/BrowseProduct';
-import AddEditProduct from '../components/AddEditProduct';
 import useProducts from '../hooks/useProducts';
+import useBasket from '../hooks/useBasket';
+import AddToBasket from '../components/AddToBasket';
 
 export default function ProductBrowserScreen() {
-  const { products, loading, posting, fetchProducts, createProduct, updateProduct, deleteProduct } = useProducts();
-
-  const [editingId, setEditingId] = useState(null);
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  const { products, loading, fetchProducts } = useProducts();
+  const { addProductToBasket } = useBasket();
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
+  async function handleAddToBasket(item) {
+    try {
+      await addProductToBasket(item);
+      Alert.alert('Added', `${item.name} added to basket`);
+    } catch (err) {
+      Alert.alert('Error', String(err));
+    }
+  }
 
   function renderItem({ item }) {
-     return <ProductItem item={item} />;
+    return <ProductItem item={item} onAddToBasket={handleAddToBasket} />;
   }
 
   return (
