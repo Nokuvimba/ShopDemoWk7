@@ -33,21 +33,12 @@ export default function useBasket() {
         return [];
       }
       
-      // Transform basket items to flatten productIds array
-      const transformedItems = basketData.map(basketItem => {
-        // If productIds is populated, it will be an array of product objects
-        const product = basketItem.productIds?.[0];
-        console.log('Product from basketItem:', product);
-        
-        if (product && typeof product === 'object' && product._id) {
-          return {
-            ...product,
-            quantity: basketItem.quantity,
-            basketItemId: basketItem._id
-          };
-        }
-        return basketItem;
-      });
+      // Transform basket items with new structure
+      const transformedItems = basketData.map(item => ({
+        ...item.productId,
+        quantity: item.quantity,
+        basketItemId: item._id
+      }));
       
       console.log('Transformed items:', JSON.stringify(transformedItems, null, 2));
       setBasket(transformedItems);
@@ -64,15 +55,7 @@ export default function useBasket() {
     try {
       const productId = item._id || item.id;
       // Send the product data directly to basket
-      const body = { 
-        productId,
-        productIds: [productId],
-        quantity: 1,
-        name: item.name,
-        price: item.price,
-        description: item.description,
-        image: item.image
-      };
+      const body = { productId, quantity: 1 };
       const res = await basketApi.addToBasket(body);
       await fetchBasket();
       return res;
