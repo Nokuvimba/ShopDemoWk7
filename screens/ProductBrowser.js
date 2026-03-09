@@ -14,6 +14,7 @@ import {
   ActivityIndicator,
   Alert,
 } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 import ProductItem from '../components/BrowseProduct';
 import useProducts from '../hooks/useProducts';
@@ -24,9 +25,11 @@ export default function ProductBrowserScreen() {
   const { products, loading, fetchProducts } = useProducts();
   const { addProductToBasket } = useBasket();
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchProducts();
+    }, [])
+  );
 
   async function handleAddToBasket(item) {
     try {
