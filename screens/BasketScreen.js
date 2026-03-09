@@ -15,7 +15,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import useBasket from '../hooks/useBasket';
 
 export default function BasketScreen() {
-  const { products, loading, fetchBasket, deleteProductInBasket } = useBasket();
+  const { products, loading, fetchBasket, deleteProductInBasket, updateProductQuantity } = useBasket();
   const [quantities, setQuantities] = useState({});
 
   useFocusEffect(
@@ -36,6 +36,20 @@ export default function BasketScreen() {
   function updateQuantity(id, value) {
     const num = parseInt(value) || 1;
     setQuantities(prev => ({ ...prev, [id]: num }));
+  }
+
+  async function handleQuantityChange(basketId, productId, newQuantity) {
+    const num = parseInt(newQuantity) || 0;
+    if (num <= 0) {
+      handleDelete(basketId);
+    } else {
+      setQuantities(prev => ({ ...prev, [productId]: num }));
+      try {
+        await updateProductQuantity(basketId, num);
+      } catch (err) {
+        Alert.alert('Error', 'Failed to update quantity');
+      }
+    }
   }
 
   async function handleDelete(id) {
@@ -62,6 +76,7 @@ export default function BasketScreen() {
 
   function renderItem({ item }) {
     const id = item._id || item.id;
+    const basketId = item.basketItemId;
     const quantity = quantities[id] || 1;
     const itemTotal = (item.price || 0) * quantity;
 
@@ -78,13 +93,14 @@ export default function BasketScreen() {
             style={styles.quantityInput}
             value={String(quantity)}
             onChangeText={(val) => updateQuantity(id, val)}
+            onBlur={() => handleQuantityChange(basketId, id, quantity)}
             keyboardType="numeric"
           />
           <Text style={styles.itemTotal}>Total: €{itemTotal.toFixed(2)}</Text>
         </View>
 
         <View style={styles.buttonContainer}>
-          <Button title="Remove" color="#d9534f" onPress={() => handleDelete(id)} />
+          <Button title="Remove" color="#d9534f" onPress={() => handleDelete(basketId)} />
         </View>
       </View>
     );

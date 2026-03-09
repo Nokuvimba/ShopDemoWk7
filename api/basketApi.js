@@ -37,6 +37,21 @@ async function addToBasket(body) {
 
 
 
+async function updateQuantity(id, quantity) {
+  const res = await fetch(`${BASE_URL}/basket/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
+    body: JSON.stringify({ quantity }),
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Server: ${res.status} ${text}`);
+  }
+  return res.json ? await res.json().catch(() => null) : null;
+}
+
+
+
 // Delete a product by id. Returns true on success, throws on failure.
 async function removeFromBasket(id) {
   const res = await fetch(`${BASE_URL}/basket/${id}`, {
@@ -55,5 +70,6 @@ async function removeFromBasket(id) {
 export default {
   getProducts,
   addToBasket,
+  updateQuantity,
   removeFromBasket,
 };

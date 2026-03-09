@@ -65,6 +65,17 @@ export default function useBasket() {
   }
 
 
+  async function updateProductQuantity(basketItemId, quantity) {
+    setLoading(true);
+    try {
+      await basketApi.updateQuantity(basketItemId, quantity);
+      await fetchBasket();
+    } finally {
+      setLoading(false);
+    }
+  }
+
+
   async function deleteProductInBasket(id) {
     setLoading(true);
     try {
@@ -81,6 +92,7 @@ export default function useBasket() {
   return {
     fetchBasket,
     addProductToBasket,
+    updateProductQuantity,
     deleteProductInBasket,
     products,
     loading,
