@@ -26,7 +26,7 @@ export default function useBasket() {
     setLoading(true);
     try {
       const basketData = await basketApi.getProducts();
-      console.log('Raw basket data:', JSON.stringify(basketData, null, 2));
+      console.log('Raw basket data:', JSON.stringify(basketData, null, 2)); 
       
       if (!Array.isArray(basketData)) {
         setBasket([]);
